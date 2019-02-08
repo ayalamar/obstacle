@@ -1,4 +1,4 @@
-# obstacle script
+# obstacle analysis script
 library(ggplot2)
 library(dplyr)
 
@@ -24,3 +24,16 @@ taskplot <- ggplot(data=taskmeans, aes(x=trial, y=Mean_RMSExy)) +
   ylim(1.5, 3.5)
 
 print(taskplot)
+
+# some basic statistics (dv -- RMSE)
+
+block1<- obs_dual_train %>% filter(trial %in% c(0)) %>% group_by(subject) %>% summarise(RMSE = mean(RMSExy, na.rm=TRUE), block = mean(block5))
+blocklast<- obs_dual_train %>% filter(trial %in% c(357,358,359)) %>% group_by(subject) %>% summarise(RMSE = mean(RMSExy, na.rm=TRUE), block = mean(block5))
+adaptdf<- rbind(block1,blocklast)
+
+adaptdf$block <- factor(adaptdf$block)
+adaptdf$subject <- factor(adaptdf$subject)
+
+RM_pv <- aov(RMSE ~ block + Error(subject/block), data=adaptdf)
+summary(RM_pv)
+
