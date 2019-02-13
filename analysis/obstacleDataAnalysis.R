@@ -148,9 +148,10 @@ for (rot in sort(unique(obs_single_AE$rotationval))){
   
   AE_single_n <- nocur2$pv - nocur1$pv
   t.test(AE_single_n, mu = 0)
-  
+ 
   
   # single CW t = 1.9947, df = 12, p-value = 0.0693
   # single CCW t = -1.564, df = 10, p-value = 0.1489
 
+  ## Compare between CW and CCW groups and collapse if possible
 }
