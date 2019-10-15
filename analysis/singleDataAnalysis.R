@@ -6,7 +6,7 @@ library(dplyr)
 ####################################################################
 ########################## single controls #########################
 # load
-obssingle <- read.csv('DualObs_Data0305_SINGLESONLY.csv', header = TRUE)
+obssingle <- read.csv('data/DualObs_Data0305_SINGLESONLY.csv', header = TRUE)
 obssingle <- tbl_df(obssingle) # make to tibble
 
 obssingle <- obssingle %>% filter(condition == c('train_CW', 'train_CCW'))
@@ -83,7 +83,7 @@ for (rot in sort(unique(obs_single_AE$rotationval))){
     + geom_point()
   
   AE_single_n <- nocur2$pv - nocur1$pv
-  t.test(AE_single_n, mu = 0)
+  t.test(AE_single_n, mu = 0, alternative = "greater")
   # single CW t = 1.9947, df = 12, p-value = 0.0693
   # single CCW t = -1.564, df = 10, p-value = 0.1489
 

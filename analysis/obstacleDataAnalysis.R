@@ -6,7 +6,7 @@ library(dplyr)
 ####################################################################
 ########################## single controls #########################
 # load
-obssingle <- read.csv('DualObs_Data0305_SINGLESONLY.csv', header = TRUE)
+obssingle <- read.csv('data/DualObs_Data0305_SINGLESONLY.csv', header = TRUE)
 obssingle <- tbl_df(obssingle) # make to tibble
 
 obssingle <- obssingle %>% filter(condition == c('train_CW', 'train_CCW'))
