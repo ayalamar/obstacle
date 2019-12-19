@@ -214,13 +214,13 @@ unobs_NC1_collapsed <- unobs_NC_df %>%
   filter(condition == "nocur_1") %>%
   group_by(subject) %>%
   filter(trial %in% c(max(trial) - 4, max(trial) - 3, max(trial) - 2, max(trial) -1 , max(trial))) %>%
-  summarise(pv_nc1 = mean(angmaxvel, na.rm=TRUE))
+  summarise(pv_nc1 = mean(angmaxvel_n, na.rm=TRUE))
   
 unobs_NC2_collapsed <- unobs_NC_df %>%
   filter(condition == "nocur_2") %>%
   group_by(subject) %>%
   filter(trial == min(trial)) %>%
-  summarise(pv_nc2 = mean(angmaxvel, na.rm=TRUE))
+  summarise(pv_nc2 = mean(angmaxvel_n, na.rm=TRUE))
 
 t.test(unobs_NC2_collapsed$pv_nc2 - unobs_NC1_collapsed$pv_nc1, mu = 0, alternative = "greater")
 # t = -1.1783, df = 23, p-value = 0.8746
