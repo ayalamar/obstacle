@@ -1,8 +1,6 @@
-################################
-################################
-################################
-
 # SINGLE OBSTACLE ANALYSIS
+# ONLY ANALYSES UNOBSTRUCTED TARGET SETS
+# ANALYZE LEARNING FOR EACH OBSTACLE AND ONLY "FREE" TARGET SETS
 
 library(ggplot2)
 library(dplyr)
@@ -20,50 +18,8 @@ obssingle <- tbl_df(obssingle)
 ################################
 ################################
 
-# ALL TRAINING DATA - VISUOMOTOR ADAPTATION - ROTATIONS COLLAPSED
-
 obs_single_train <- obssingle %>%
   filter(condition %in% c('train_CCW', 'train_CW')) 
-
-taskmeans <- obs_single_train %>%
-  group_by(subject) %>%
-  group_by(trial) %>% 
-  summarise(Mean_RMSExy = mean(RMSExy, na.rm = TRUE),
-            SD_RMSExy = sd(RMSExy, na.rm = TRUE), 
-            SEM_RMSExy = SD_RMSExy/sqrt(length(unique(subject))))
-
-ggplot(data = taskmeans, aes(x = trial, y = Mean_RMSExy)) +
-  geom_line() + 
-  geom_ribbon(aes(ymin = Mean_RMSExy - SEM_RMSExy, ymax = Mean_RMSExy + SEM_RMSExy),
-              alpha = 0.4) +
-  theme(panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        panel.background = element_blank(),
-        axis.line = element_line(colour = "black")) +
-  ylim(0, 4) +
-  ylab("Mean RMSExy") +
-  xlab("Trial") +
-  ggtitle('Single Obstacle: Training with Obstructed and Unobstructed Targets')
-
-## stats
-block1 <- obs_single_train %>%
-  group_by(subject) %>% 
-  filter(trial %in% min(trial)) %>%
-  summarise(RMSE = mean(RMSExy, na.rm = TRUE), block = 1)
-
-blocklast <- obs_single_train %>%
-  group_by(subject) %>%
-  filter(trial %in% c(max(trial)-4, max(trial)-3, max(trial)-2, max(trial)-1, max(trial))) %>% 
-  summarise(RMSE = mean(RMSExy, na.rm = TRUE), block = 2)
-
-t.test(block1$RMSE, blocklast$RMSE, alternative = "greater", paired = TRUE)
-
-################################
-################################
-################################
-
-# FROM HERE ON, ONLY ANALYSE UNOBSTRUCTED TARGET SETS!!!
-# ANALYZE LEARNING FOR EACH OBSTACLE AND ONLY "FREE" TARGET SETS
 
 ## CW trials - leftward obstacle - analyze only 90, 75, and 60 degree targets
 obs_single_train_CW <- obs_single_train %>%
@@ -125,7 +81,7 @@ for (rot in sort(unique(unobs_df$rotationval))){
               group_sd = sd(blockmean, na.rm = TRUE),
               group_sem = group_sd/sqrt(length(unique(subject))))
   
-  plot_title <- sprintf('Single Training: Rotation %s', rot)
+  plot_title <- sprintf('Unobstructed Single Training: Rotation %s', rot)
   
   block_train <- ggplot(data = ppdf,
                         aes(x = block, y = blockmean)) +
@@ -137,6 +93,8 @@ for (rot in sort(unique(unobs_df$rotationval))){
     #               aes(color=block)) +  
     geom_line(data = ppdf.summary, 
               aes(x = block, y = group_mean)) +
+    geom_point(data = ppdf.summary, 
+               aes(x = block, y = group_mean)) + 
     geom_ribbon(data = ppdf.summary, 
                 aes(x = block, ymin = group_mean - group_sem, ymax = group_mean + group_sem),
                 alpha=0.4,
@@ -292,4 +250,5 @@ for (rot in sort(unique(unobs_NC_df$rotationval))){
     ggtitle(plot_title) 
   
   print(AE_bars)
+  
 }
