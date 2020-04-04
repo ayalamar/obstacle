@@ -92,6 +92,28 @@ ggplot(data = blockdf, aes(x = block5, y = GroupMean_RMSExy)) +
   facet_grid(cols = vars(group)) +
   coord_fixed(ratio=20)
 
+obssingle.summary <- obssingle %>% 
+  filter(condition %in% c('train_CCW', 'train_CW')) %>%
+  filter(block5 %in% c(0, 1, 35)) %>%
+  group_by(subject, block5) %>%
+  summarise(Mean_RMSExy = mean(RMSExy, na.rm = TRUE),
+            group = 'single') 
+
+obsdual.summary <- obsdual %>%
+  filter(condition == 'train_dual') %>%
+  filter(block5 %in% c(0, 1, 71)) %>%
+  group_by(subject, block5) %>%
+  summarise(Mean_RMSExy = mean(RMSExy, na.rm = TRUE), 
+            group = 'dual')
+  
+obsdual.summary$block5[which(obsdual.summary$block5 == 71)] <- 35 #match block numbers
+obs.summary <- rbind(obssingle.summary, obsdual.summary)
+obs_aov <- aov(Mean_RMSExy ~ block5 + group + block5*group + Error(subject/block5), data = obs.summary)
+summary(obs_aov)
+t.test(obs.summary$Mean_RMSExy[which(obs.summary$block5==1 & obs.summary$group=="single")],
+       obs.summary$Mean_RMSExy[which(obs.summary$block5==1 & obs.summary$group=="dual")], 
+       paired = FALSE)
+
 # plot reach AE singles
 NC_df <- obssingle %>%
   filter(condition %in% c("nocur_1", "nocur_2")) %>%
