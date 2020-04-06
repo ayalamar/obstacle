@@ -94,20 +94,17 @@ for (rot in sort(unique(unobs_df$rotationval))){
   block_train <- ggplot(data = ppdf,
                         aes(x = block, y = blockmean)) +
     geom_line(aes(x=block, y=blockmean, colour=as.factor(subject)), alpha = 0.1) +
-    # geom_beeswarm(alpha = 0.8,
-    #               dodge.width = 2,
-    #               cex = 3,
-    #               stroke = 0.3,
-    #               aes(color=block)) +  
     geom_line(data = ppdf.summary, 
               aes(x = block, y = group_mean)) +
+    geom_point(data = ppdf.summary, 
+               aes(x = block, y = group_mean)) + 
     geom_ribbon(data = ppdf.summary, 
                 aes(x = block, ymin = group_mean - group_sem, ymax = group_mean + group_sem),
                 alpha=0.4,
                 inherit.aes = FALSE) +
     ylim(0,6) +
     xlim(0.5,7.5) +
-    coord_fixed(ratio = 2) +
+    coord_fixed(ratio = 3) +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
           panel.background = element_blank(), axis.line = element_line(colour = "black"),
           legend.title = element_blank(), legend.position = "none") +
@@ -246,7 +243,7 @@ for (rot in sort(unique(unobs_NC_df$rotationval))){
                   alpha = 0.8,
                    cex = 2,
                   stroke = 0.3,
-                  color = 'blue') +
+                  color = 'gray50') +
     theme(panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(),
           panel.background = element_blank(), 

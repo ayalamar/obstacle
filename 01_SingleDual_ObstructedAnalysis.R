@@ -107,9 +107,14 @@ obsdual.summary <- obsdual %>%
             group = 'dual')
   
 obsdual.summary$block5[which(obsdual.summary$block5 == 71)] <- 35 #match block numbers
+
 obs.summary <- rbind(obssingle.summary, obsdual.summary)
+
+# 2 (group) x 3 (block) MIXED ANOVA
 obs_aov <- aov(Mean_RMSExy ~ block5 + group + block5*group + Error(subject/block5), data = obs.summary)
 summary(obs_aov)
+
+# roughly assess learning rate by comparing block 2
 t.test(obs.summary$Mean_RMSExy[which(obs.summary$block5==1 & obs.summary$group=="single")],
        obs.summary$Mean_RMSExy[which(obs.summary$block5==1 & obs.summary$group=="dual")], 
        paired = FALSE)

@@ -86,11 +86,6 @@ for (rot in sort(unique(unobs_df$rotationval))){
   block_train <- ggplot(data = ppdf,
                         aes(x = block, y = blockmean)) +
     geom_line(aes(x=block, y=blockmean, colour=as.factor(subject)), alpha = 0.1) +
-    # geom_beeswarm(alpha = 0.8,
-    #               dodge.width = 2,
-    #               cex = 3,
-    #               stroke = 0.3,
-    #               aes(color=block)) +  
     geom_line(data = ppdf.summary, 
               aes(x = block, y = group_mean)) +
     geom_point(data = ppdf.summary, 
@@ -101,7 +96,7 @@ for (rot in sort(unique(unobs_df$rotationval))){
                 inherit.aes = FALSE) +
     ylim(0,6) +
     xlim(0.5,7.5) +
-    coord_fixed(ratio = 2) +
+    coord_fixed(ratio = 3) +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
           panel.background = element_blank(), axis.line = element_line(colour = "black"),
           legend.title = element_blank(), legend.position = "none") +
@@ -217,7 +212,7 @@ for (rot in sort(unique(unobs_NC_df$rotationval))){
   }
   
   # plot AE for each rotation
-  plot_title <- sprintf('Single Training AE: Rotation %s', rot)
+  plot_title <- sprintf('Single AE %s', rot)
   
   AE.summary <- nocur1 %>% 
     summarise(Mean_pv = mean(AE, na.rm = TRUE), 
@@ -233,10 +228,10 @@ for (rot in sort(unique(unobs_NC_df$rotationval))){
                   width = 0.05, size = 0.5, color = "black",
                   position = position_dodge(width = 0.9)) +
     geom_beeswarm(data = nocur1, aes(x = block, y = AE),
-                  alpha = 0.8,
+                  alpha = 0.5,
                   cex = 2,
                   stroke = 0.3,
-                  color = 'blue') +
+                  color = 'gray50') +
     theme(panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(),
           panel.background = element_blank(), 
